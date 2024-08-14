@@ -1,0 +1,75 @@
+# Directory build
+/build/
+Build/
+build/
+
+# File di configurazione di CMake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+CMakeLists.txt.user
+CTestTestfile.cmake
+Makefile
+
+# File di output degli eseguibili e librerie
+*.out
+*.o
+*.obj
+*.lo
+*.la
+*.a
+*.lib
+*.dll
+*.so
+*.dylib
+*.exe
+*.app
+
+# File di log
+CMakeOutput.log
+CMakeError.log
+
+# File temporanei di IDE o editor
+*.swp
+*.swo
+*.swn
+*.bak
+*.tmp
+
+# File di build di Visual Studio
+*.sln
+*.vcxproj*
+*.pdb
+*.idb
+*.obj
+*.ilk
+*.aps
+*.ncb
+*.sdf
+*.opensdf
+*.vcxproj.user
+*.ipch
+*.tlog/
+*.lastbuildstate
+*.vs/
+
+# File di build di Xcode
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+xcuserdata/
+*.xcscmblueprint
+*.xcworkspace
+
+# File di compilazione Ninja
+build.ninja
+rules.ninja
+
+# File di build per Make e Ninja
+compile_commands.json
+
+# File di configurazione dei generatori CMake
+CMakeScripts/
+CMakeFiles/
+CMakeCache.txt
