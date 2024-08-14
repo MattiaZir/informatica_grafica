@@ -1,38 +1,3 @@
-/**
-  Codice che mostra come sfruttare la libreria esterna assimp per impofrtare dei
-  modelli 3D e renderizzarli nella scena.
-  Al momento, il codice è in grado di renderizzare modelli costituiti da una
-  singola mesh e con una singola Texture associata.
-
-  I modelli 3D sono memorizzato nella cartella models (nella root di questo codice).
-  Il formato dei file è Wavefront (https://en.wikipedia.org/wiki/Wavefront_.obj_file), 
-  un semplice file di testo con la lista delle coordinate dei vertici, facce e 
-  normali dei triangoli, e la/le texture associata/e.  
-
-  E' stata creata una classe Mesh che gestisce il caricamento e il rendering dei
-  modelli.
-
-  Per comodità, sono state istanziate delle variabili globali di tipo Mesh che
-  contengono diversi modelli 3D:
-
-  Modelli singoli:
-  'teapot': Una teiera (visualizzabile premendo 't')
-  'skull' : Una teschio (visualizzabile premendo 'k')
-  'dragon': Una drago (visualizzabile premendo 'g')
-  'boot'  : Uno scarpone (visualizzabile premendo 'b')
-  'flower': Un fiore (visualizzabile premendo 'f')
-  
-  Modello composto
-  'marius': Un volto (visualizzabile premendo 'm'). 
-  Questo modello è composto da diverse mesh (6) ciascuna definita in un suo 
-  file separato. Una volta caricate le singole mesh, queste sono renderizzate 
-  di seguito all'interno dello stesso ciclo di rendering per avere il volto 
-  completo. Inoltre, per questo modello, alcune texture hanno delle trasparenze
-  Per poterle usare in modo corretto è necessario impostare OpenGL.
-  Vedere la funzione render_marius().
-*/
-
-
 #include <iostream>
 #include <sstream>
 #include "GL/glew.h" // prima di freeglut
@@ -42,18 +7,15 @@
 #include "transform.h"
 #include "camera.h"
 
-//#include "cube.h"
+#include "cube.h"
 #include "myshaderclass.h"
 
 #include "mesh.h"
 
 MyShaderClass myshaders;
+Cube cube;
 
-Mesh marius[6];
-
-Mesh teapot, skull, boot, dragon, flower;
-
-unsigned char MODEL_TO_RENDER = 't';
+unsigned char MODEL_TO_RENDER = 'c';
 
 
 /**
@@ -61,7 +23,7 @@ unsigned char MODEL_TO_RENDER = 't';
 */
 struct global_struct {
 
-  int WINDOW_WIDTH  = 1024; // Larghezza della finestra 
+  int WINDOW_WIDTH  = 1024; // Larghezza della finestra
   int WINDOW_HEIGHT = 768; // Altezza della finestra
 
   Camera camera;
@@ -72,7 +34,7 @@ struct global_struct {
 
   const float SPEED = 1;
   float gradX;
-  float gradY; 
+  float gradY;
 
   global_struct() : gradX(0.0f), gradY(0.0f) {}
 
@@ -81,7 +43,7 @@ struct global_struct {
 
 
 /**
-Prototipi della nostre funzioni di callback. 
+Prototipi della nostre funzioni di callback.
 Sono definite più avanti nel codice.
 */
 void MyRenderScene(void);
@@ -139,24 +101,6 @@ void init(int argc, char*argv[]) {
 }
 
 void create_scene() {
-
-  marius[0].load_mesh("models/marius/head.obj",aiProcess_FlipUVs);
-  marius[1].load_mesh("models/marius/eyes.obj",aiProcess_FlipUVs);
-  marius[2].load_mesh("models/marius/eyebrows.obj",aiProcess_FlipUVs);
-  marius[3].load_mesh("models/marius/hair_plate.obj",aiProcess_FlipUVs);
-  marius[4].load_mesh("models/marius/eyelashesLower.obj",aiProcess_FlipUVs);
-  marius[5].load_mesh("models/marius/eyelashesUpper.obj",aiProcess_FlipUVs);
-
-  teapot.load_mesh("models/teapot.obj");
-
-  boot.load_mesh("models/boot/boot.obj");
-
-  dragon.load_mesh("models/dragon.obj");
-
-  skull.load_mesh("models/skull.obj");
-
-  flower.load_mesh("models/flower/flower.obj", aiProcess_Triangulate);
-
   global.camera.set_camera(
           glm::vec3(0, 0, 0),
           glm::vec3(0, 0,-1),
@@ -171,7 +115,7 @@ void create_scene() {
     100
   );
 
-  global.ambient_light = AmbientLight(glm::vec3(1,1,1),0.2); 
+  global.ambient_light = AmbientLight(glm::vec3(1,1,1),0.2);
   global.diffusive_light = DiffusiveLight(glm::vec3(1,1,1),glm::vec3(0,0,-1),0.5); // 0.5
   global.specular_light = SpecularLight(0.5,30);
 
@@ -181,79 +125,9 @@ void create_scene() {
 
 }
 
-void render_marius() {
+void render_cube() {
   LocalTransform modelT;
-  modelT.rotate(global.gradX, 180+global.gradY ,0.0f);
-  modelT.translate(0,-1.7,-0.8);
-
-  myshaders.set_model_transform(modelT.T());
-  myshaders.set_camera_transform(global.camera.CP());
-  myshaders.set_ambient_light(global.ambient_light);
-  myshaders.set_diffusive_light(global.diffusive_light);
-  myshaders.set_specular_light(global.specular_light);
-  myshaders.set_camera_position(global.camera.position());
-
-  marius[0].render();
-  marius[1].render();
-  glEnable(GL_BLEND);
-  glEnable(GL_ALPHA_TEST);
-  glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
-  marius[2].render();
-  marius[3].render();
-  marius[4].render();
-  marius[5].render();
-  glDisable(GL_BLEND);
-  glDisable(GL_ALPHA_TEST);  
-}
-
-void render_teapot() {
-  LocalTransform modelT;
-  modelT.rotate(global.gradX, global.gradY ,0.0f);
-  modelT.translate(0,-1.6,-10);
-
-  myshaders.set_model_transform(modelT.T());
-  myshaders.set_camera_transform(global.camera.CP());
-  myshaders.set_ambient_light(global.ambient_light);
-  myshaders.set_diffusive_light(global.diffusive_light);
-  myshaders.set_specular_light(global.specular_light);
-  myshaders.set_camera_position(global.camera.position());
-
-  teapot.render();  
-}
-
-void render_boot() {
-  LocalTransform modelT;
-  modelT.rotate(global.gradX, global.gradY ,0.0f);
-  modelT.translate(0,-10,-70);
-
-  myshaders.set_model_transform(modelT.T());
-  myshaders.set_camera_transform(global.camera.CP());
-  myshaders.set_ambient_light(global.ambient_light);
-  myshaders.set_diffusive_light(global.diffusive_light);
-  myshaders.set_specular_light(global.specular_light);
-  myshaders.set_camera_position(global.camera.position());
-
-  boot.render();  
-}
-
-void render_flower() {
-  LocalTransform modelT;
-  modelT.rotate(-90+global.gradX, global.gradY ,0.0f);
-  modelT.translate(0, -4,-15);
-
-  myshaders.set_model_transform(modelT.T());
-  myshaders.set_camera_transform(global.camera.CP());
-  myshaders.set_ambient_light(global.ambient_light);
-  myshaders.set_diffusive_light(global.diffusive_light);
-  myshaders.set_specular_light(global.specular_light);
-  myshaders.set_camera_position(global.camera.position());
-
-  flower.render();  
-}
-
-void render_dragon() {
-  LocalTransform modelT;
-  modelT.rotate(global.gradX, global.gradY ,0.0f);
+  modelT.rotate(global.gradX, global.gradY, 0.0f);
   modelT.translate(0,0,-5);
 
   myshaders.set_model_transform(modelT.T());
@@ -263,34 +137,14 @@ void render_dragon() {
   myshaders.set_specular_light(global.specular_light);
   myshaders.set_camera_position(global.camera.position());
 
-  dragon.render();  
-}
-
-void render_skull() {
-  LocalTransform modelT;
-  modelT.rotate(global.gradX, global.gradY ,0.0f);
-  modelT.translate(0,-5,-20);
-
-  myshaders.set_model_transform(modelT.T());
-  myshaders.set_camera_transform(global.camera.CP());
-  myshaders.set_ambient_light(global.ambient_light);
-  myshaders.set_diffusive_light(global.diffusive_light);
-  myshaders.set_specular_light(global.specular_light);
-  myshaders.set_camera_position(global.camera.position());
-
-  skull.render();  
+  cube.render();
 }
 
 void MyRenderScene() {
   glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
   switch (MODEL_TO_RENDER) {
-    case 't': render_teapot(); break;
-    case 'b': render_boot(); break;
-    case 'k': render_skull(); break;
-    case 'g': render_dragon(); break;
-    case 'm': render_marius(); break;
-    case 'f': render_flower(); break;
+    case 'c': render_cube(); break;
   }
 
   glutSwapBuffers();
@@ -365,15 +219,9 @@ void MyKeyboard(unsigned char key, int x, int y) {
           glm::vec3(0, 1, 0)
       );
     break;
-
-    case 't':
-    case 'b':
-    case 'g': 
-    case 'k':
-    case 'm':
-    case 'f':
+     case 'c':
       MODEL_TO_RENDER = key;
-    break;
+      break;
   }
 
   glutPostRedisplay();
@@ -410,6 +258,6 @@ int main(int argc, char* argv[])
   create_scene();
 
   glutMainLoop();
-  
+
   return 0;
 }

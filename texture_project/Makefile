@@ -65,5 +65,3 @@ mesh.o : mesh.cpp
 .PHONY clean:
 clean:
 	rm *.o *.exe
-
-
