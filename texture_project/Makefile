@@ -15,19 +15,19 @@ ifeq ($(OS),Windows_NT)
 	LIBDIRS += -L$(BASEDIR)/glew/lib/Release/Win32
 	LIBDIRS += -L$(BASEDIR)/assimp/lib
 
-	LIBS += -lfreeglut 
-	LIBS += -lopengl32 
+	LIBS += -lfreeglut
+	LIBS += -lopengl32
 	LIBS += -lglew32
 	LIBS += -lassimp
 
 else
-	LIBS += -lglut 
+	LIBS += -lglut
 	LIBS += -lGLEW
 	LIBS += -lGL
 	LIBS += -lassimp
 endif
 
-OBJS = main.o utilities.o transform.o camera.o shaderclass.o myshaderclass.o light.o texture.o cube.o mesh.o
+OBJS = main.o utilities.o transform.o camera.o shaderclass.o myshaderclass.o perlinnoiseshaders light.o texture.o cube.o mesh.o
 
 caricamento_modelli.exe : $(OBJS)
 	$(CC) $(CCFLAGS) $^ $(LIBDIRS) $(LIBS) -o $@
@@ -48,6 +48,9 @@ shaderclass.o : shaderclass.cpp
 	$(CC) -c $(CCFLAGS) $(INCLUDEDIRS) $? -o $@
 
 myshaderclass.o : myshaderclass.cpp
+	$(CC) -c $(CCFLAGS) $(INCLUDEDIRS) $? -o $@
+
+perlinnoiseshaders.o : perlinnoiseshaders.cpp
 	$(CC) -c $(CCFLAGS) $(INCLUDEDIRS) $? -o $@
 
 light.o : light.cpp

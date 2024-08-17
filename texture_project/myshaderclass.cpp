@@ -2,11 +2,11 @@
 #include "utilities.h"
 
 void MyShaderClass::set_model_transform(const glm::mat4 &transform) {
-  glUniformMatrix4fv(_model_transform_location, 1, GL_FALSE, const_cast<float *>(&transform[0][0]));       
+  glUniformMatrix4fv(_model_transform_location, 1, GL_FALSE, const_cast<float *>(&transform[0][0]));
 }
 
 void MyShaderClass::set_camera_transform(const glm::mat4 &transform) {
-  glUniformMatrix4fv(_camera_transform_location, 1, GL_FALSE, const_cast<float *>(&transform[0][0]));       
+  glUniformMatrix4fv(_camera_transform_location, 1, GL_FALSE, const_cast<float *>(&transform[0][0]));
 }
 
 void MyShaderClass::set_ambient_light(const AmbientLight &al) {
@@ -36,8 +36,8 @@ void MyShaderClass::set_sampler(int sampler_id) {
 }
 
 bool MyShaderClass::load_shaders() {
-  return  add_shader(GL_VERTEX_SHADER,"14.vert") &&
-          add_shader(GL_FRAGMENT_SHADER,"14.frag");
+  return  add_shader(GL_VERTEX_SHADER,"perlinnoise.vert") &&
+          add_shader(GL_FRAGMENT_SHADER,"perlinnoise.frag");
 }
 
 bool MyShaderClass::load_done() {

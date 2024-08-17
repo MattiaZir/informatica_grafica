@@ -4,7 +4,7 @@
 #include <string>
 #include "GL/glew.h" // prima di freeglut
 #include "texture.h"
-#include "myshaderclass.h"
+#include "perlinnoiseshader.h"
 
 class Cube {
 public:
@@ -24,14 +24,14 @@ public:
     Metodo che dà accesso al dato shader di Cube. Serve per impostare le
     varie proprietà dello shader (es. luci).
   */
-  MyShaderClass &shaders();
+  PerlinNoiseShader &shaders();
 
 private:
   GLuint _VAO;       // Vertex Array Object
   Texture _texture;  // Texture
   bool _initialized; // Oggetto usabile?
 
-  MyShaderClass _shaders; // Shaders da usare con Cube
+  PerlinNoiseShader _shaders; // Shaders da usare con Cube
 
   /**
     Inizializzazione degli oggetti OpenGL. E' fatta in un secondo tempo
@@ -48,4 +48,4 @@ private:
 
 };
 
-#endif 
+#endif
