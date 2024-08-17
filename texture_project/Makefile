@@ -27,7 +27,7 @@ else
 	LIBS += -lassimp
 endif
 
-OBJS = main.o utilities.o transform.o camera.o shaderclass.o myshaderclass.o perlinnoiseshaders light.o texture.o cube.o mesh.o
+OBJS = main.o utilities.o transform.o camera.o shaderclass.o myshaderclass.o perlinnoiseshader.o light.o texture.o cube.o mesh.o
 
 caricamento_modelli.exe : $(OBJS)
 	$(CC) $(CCFLAGS) $^ $(LIBDIRS) $(LIBS) -o $@
@@ -50,7 +50,7 @@ shaderclass.o : shaderclass.cpp
 myshaderclass.o : myshaderclass.cpp
 	$(CC) -c $(CCFLAGS) $(INCLUDEDIRS) $? -o $@
 
-perlinnoiseshaders.o : perlinnoiseshaders.cpp
+perlinnoiseshader.o : perlinnoiseshader.cpp
 	$(CC) -c $(CCFLAGS) $(INCLUDEDIRS) $? -o $@
 
 light.o : light.cpp
