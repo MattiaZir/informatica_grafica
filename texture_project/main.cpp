@@ -14,7 +14,7 @@
 #include "mesh.h"
 
 MyShaderClass myshaders;
-PerlinNoiseShader perlinshaders;
+//PerlinNoiseShader perlinshaders;
 Cube cube;
 
 unsigned char MODEL_TO_RENDER = 'c';
@@ -121,9 +121,9 @@ void create_scene() {
   global.diffusive_light = DiffusiveLight(glm::vec3(1,1,1),glm::vec3(0,0,-1),0.5); // 0.5
   global.specular_light = SpecularLight(0.5,30);
 
-  perlinshaders.init();
-  perlinshaders.enable();
-  //perlinshaders.set_sampler(0);
+  myshaders.init();
+  // myshaders.enable();
+  // myshaders.set_sampler(0);
 
 }
 
@@ -132,12 +132,13 @@ void render_cube() {
   modelT.rotate(global.gradX, global.gradY, 0.0f);
   modelT.translate(0,0,-5);
 
-  perlinshaders.set_model_transform(modelT.T());
-  perlinshaders.set_camera_transform(global.camera.CP());
-  // perlinshaders.set_ambient_light(global.ambient_light);
-  // perlinshaders.set_diffusive_light(global.diffusive_light);
-  // perlinshaders.set_specular_light(global.specular_light);
-  perlinshaders.set_camera_position(global.camera.position());
+  myshaders.set_model_transform(modelT.T());
+  myshaders.set_camera_transform(global.camera.CP());
+  myshaders.set_ambient_light(global.ambient_light);
+  myshaders.set_diffusive_light(global.diffusive_light);
+  myshaders.set_specular_light(global.specular_light);
+  myshaders.set_camera_position(global.camera.position());
+  cube.shaders(myshaders);
 
   cube.render();
 }

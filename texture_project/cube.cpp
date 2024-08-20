@@ -124,6 +124,14 @@ void Cube::render(void) {
   glBindVertexArray(0);
 }
 
-PerlinNoiseShader &Cube::shaders() {
+bool Cube::shaders(MyShaderClass &shader) {
+  _shaders = shader;
+
+  //_shaders.init();
+
+  return true;
+}
+
+MyShaderClass &Cube::shaders() {
   return _shaders;
 }

@@ -36,8 +36,8 @@ void MyShaderClass::set_sampler(int sampler_id) {
 }
 
 bool MyShaderClass::load_shaders() {
-  return  add_shader(GL_VERTEX_SHADER,"perlinnoise.vert") &&
-          add_shader(GL_FRAGMENT_SHADER,"perlinnoise.frag");
+  return  add_shader(GL_VERTEX_SHADER,"14.vert") &&
+          add_shader(GL_FRAGMENT_SHADER,"14.frag");
 }
 
 bool MyShaderClass::load_done() {
