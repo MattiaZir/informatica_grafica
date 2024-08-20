@@ -2,7 +2,7 @@
 
 #include <iostream>
 #define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h" // Libreria di suporto per leggere immagini 
+#include "stb_image.h" // Libreria di suporto per leggere immagini
 
 Texture::Texture() : _texture(-1), _target(GL_TEXTURE_2D), _valid(false) {}
 
@@ -29,11 +29,11 @@ bool Texture::load(const std::string& FileName) {
   stbi_set_flip_vertically_on_load(true);
 
   // Usa la libreria lodepng per caricare l'immagine png
-  image = stbi_load(FileName.c_str(), &width, &height, &channels, 0); 
+  image = stbi_load(FileName.c_str(), &width, &height, &channels, 0);
 
   if (channels == 3) {
     format = GL_RGB;
-  } 
+  }
   else if (channels == 4) {
     format = GL_RGBA;
   }
@@ -49,28 +49,37 @@ bool Texture::load(const std::string& FileName) {
   // Crea un oggetto Texture in OpenGL
   glGenTextures(1, &_texture);
 
-  // Collega la texture al target specifico (tipo) 
+  // Collega la texture al target specifico (tipo)
   glBindTexture(_target,_texture);
 
   // Passa le informazioni dell'immagine sulla GPU:
   // Target
-  // Numero di livelli del mipmap (0 in questo caso) 
-  // Formato della texture 
+  // Numero di livelli del mipmap (0 in questo caso)
+  // Formato della texture
   // Larghezza
   // Altezza
   // 0
   // Formato dei pixel dell'immagine di input
   // Tipo di dati dei pixel dell'immagine di input
-  // Puntatore ai dati 
-  glTexImage2D(_target, 0, GL_RGBA, width, height, 0, format, GL_UNSIGNED_BYTE, image);
-  
+  // Puntatore ai dati
+
+  unsigned char* imageData = (unsigned char*)malloc(width * height * 3 * sizeof(unsigned char));
+
+  for (int i = 0; i < width * height * 3; i += 3) {
+      imageData[i] = rand()*255;      // Red
+      imageData[i + 1] = rand()*255;  // Green
+      imageData[i + 2] = rand()*255;  // Blue
+  }
+
+  glTexImage2D(_target, 0, GL_RGBA, width, height, 0, format, GL_UNSIGNED_BYTE, imageData);
+
   // Imposta il filtro da usare per la texture minification
   glTexParameterf(_target, GL_TEXTURE_MIN_FILTER,  GL_LINEAR);
 
   // Imposta il filtro da usare per la texture magnification
   glTexParameterf(_target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-  // Unbinda la texture 
+  // Unbinda la texture
   glBindTexture(_target,0);
 
   _filename = FileName;
@@ -86,7 +95,7 @@ void Texture::bind(int TextureUnit) const {
 
   // Attiviamo la TextureUnit da usare per il sampling
   glActiveTexture(unit);
-  
+
   // Bindiamo la texture
   glBindTexture(_target, _texture);
 }
