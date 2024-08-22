@@ -135,3 +135,7 @@ bool Cube::shaders(MyShaderClass &shader) {
 MyShaderClass &Cube::shaders() {
   return _shaders;
 }
+
+void Cube::bind_texture(int texture_id) {
+  _texture.bind(texture_id);
+}

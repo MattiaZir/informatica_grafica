@@ -7,7 +7,7 @@
 /**
 	Classe di supporto per caricare in memoria una texture da un file.
 
-	Supporta solo immagini PNG. 
+	Supporta solo immagini PNG.
 */
 class Texture {
 public:
@@ -26,14 +26,15 @@ public:
 		file.
 
 		@param TextureTarget tipo di texture (es. GL_TEXTURE_2D)
-		@param FileName nome del file 
+		@param FileName nome del file
 
 		@throw una eccezione ivllib::ImageFormatError in caso di errore
 	*/
 	bool load(const std::string& FileName);
+	bool load(const unsigned char* image, int width, int height, int format);
 
 	/**
-		Attiva la textureUnit indicata e binda la texture ad essa.
+	Attiva la textureUnit indicata e binda la texture ad essa.
 	*/
 	void bind(int TextureUnit) const;
 

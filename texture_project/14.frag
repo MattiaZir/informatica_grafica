@@ -31,13 +31,13 @@ in vec3 fragment_position;
 // Coordinate di texture dei punti ricervuti dal vertex shader
 in vec2 fragment_textcoord;
 
-// Informazioni di luce ambientale 
+// Informazioni di luce ambientale
 uniform AmbientLightStruct AmbientLight;
 
-// Informazioni di luce diffusiva 
+// Informazioni di luce diffusiva
 uniform DiffusiveLightStruct DiffusiveLight;
 
-// Informazioni di luce speculare 
+// Informazioni di luce speculare
 uniform SpecularLightStruct SpecularLight;
 
 // Posizione della camera in coordinate mondo
@@ -49,7 +49,7 @@ out vec4 out_color;
 
 void main()
 {
-	// La funzione texture ritorna un vec4. 
+	// La funzione texture ritorna un vec4.
 	vec4 material_color = texture(TextSampler, fragment_textcoord);
 
 	vec3 amb =  (AmbientLight.color * AmbientLight.intensity);

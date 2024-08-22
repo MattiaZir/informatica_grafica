@@ -14,7 +14,7 @@
 #include "mesh.h"
 
 MyShaderClass myshaders;
-//PerlinNoiseShader perlinshaders;
+PerlinNoiseShader perlinshaders;
 Cube cube;
 
 unsigned char MODEL_TO_RENDER = 'c';
@@ -122,10 +122,36 @@ void create_scene() {
   global.specular_light = SpecularLight(0.5,30);
 
   myshaders.init();
+  //perlinshaders.init();
   // myshaders.enable();
   // myshaders.set_sampler(0);
 
 }
+
+void generate_perlin_noise()
+{
+  int height = 1024, width = 1024;
+
+  // Creo la finestra magica
+  GLuint fbo;
+  glGenFramebuffers(1, &fbo);
+  glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+  // Metto lo sticker sulla finestra magica
+  unsigned int textureColorbuffer;
+  glGenTextures(1, &textureColorbuffer);
+  glBindTexture(GL_TEXTURE_2D, textureColorbuffer);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 800, 600, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glBindTexture(GL_TEXTURE_2D, 0);
+
+  // Attacco lo sticker alla finestra magica
+  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorbuffer, 0);
+  glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+}
+
 
 void render_cube() {
   LocalTransform modelT;
@@ -235,7 +261,6 @@ void MySpecialKeyboard(int Key, int x, int y) {
   glutPostRedisplay();
 }
 
-
 void MyMouse(int x, int y) {
   if (global.camera.onMouse(x,y)) {
     // Risposto il mouse al centro della finestra
@@ -243,7 +268,6 @@ void MyMouse(int x, int y) {
   }
   glutPostRedisplay();
 }
-
 
 // Funzione globale che si occupa di gestire la chiusura della finestra.
 void MyClose(void) {

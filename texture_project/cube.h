@@ -21,12 +21,9 @@ public:
   void render(void);
 
   bool shaders(MyShaderClass &shader);
-
-  /**
-    Metodo che dà accesso al dato shader di Cube. Serve per impostare le
-    varie proprietà dello shader (es. luci).
-  */
   MyShaderClass &shaders();
+
+  void bind_texture(int texture_id);
 
 private:
   GLuint _VAO;       // Vertex Array Object

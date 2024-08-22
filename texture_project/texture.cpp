@@ -46,6 +46,17 @@ bool Texture::load(const std::string& FileName) {
     exit(0);
   }
 
+  load(image, width, height, format);
+
+  stbi_image_free(image);
+
+  _filename = FileName;
+
+  return true;
+}
+
+bool Texture::load(const unsigned char* image, int width, int height, int format)
+{
   // Crea un oggetto Texture in OpenGL
   glGenTextures(1, &_texture);
 
@@ -63,15 +74,15 @@ bool Texture::load(const std::string& FileName) {
   // Tipo di dati dei pixel dell'immagine di input
   // Puntatore ai dati
 
-  unsigned char* imageData = (unsigned char*)malloc(width * height * 3 * sizeof(unsigned char));
+  // unsigned char* imageData = (unsigned char*)malloc(20000 * 20000 * 3 * sizeof(unsigned char));
 
-  for (int i = 0; i < width * height * 3; i += 3) {
-      imageData[i] = rand()*255;      // Red
-      imageData[i + 1] = rand()*255;  // Green
-      imageData[i + 2] = rand()*255;  // Blue
-  }
+  // for (int i = 0; i < width * height * 3; i += 3) {
+  //     imageData[i] = rand()*255;      // Red
+  //     imageData[i + 1] = rand()*255;  // Green
+  //     imageData[i + 2] = rand()*255;  // Blue
+  // }
 
-  glTexImage2D(_target, 0, GL_RGBA, width, height, 0, format, GL_UNSIGNED_BYTE, imageData);
+  glTexImage2D(_target, 0, GL_RGBA, width, height, 0, format, GL_UNSIGNED_BYTE, image);
 
   // Imposta il filtro da usare per la texture minification
   glTexParameterf(_target, GL_TEXTURE_MIN_FILTER,  GL_LINEAR);
@@ -82,10 +93,7 @@ bool Texture::load(const std::string& FileName) {
   // Unbinda la texture
   glBindTexture(_target,0);
 
-  _filename = FileName;
   _valid = true;
-
-  stbi_image_free(image);
 
   return true;
 }

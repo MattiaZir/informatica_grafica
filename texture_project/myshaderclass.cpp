@@ -55,7 +55,7 @@ bool MyShaderClass::load_done() {
   _specular_shininess_location  = get_uniform_location("SpecularLight.shininess");
   _camera_position_location     = get_uniform_location("CameraPosition");
 
-  _texture_sampler_location     = get_uniform_location("TextSampler");
+  //_texture_sampler_location     = get_uniform_location("TextSampler");
 
   return  (_model_transform_location != INVALID_UNIFORM_LOCATION) &&
           (_camera_transform_location != INVALID_UNIFORM_LOCATION) &&

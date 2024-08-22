@@ -16,11 +16,14 @@ public:
     bool load_shaders();
     bool load_done();
 
+    void texture(GLuint texture);
+    int texture();
 
-private:
+   private:
     GLint _model_transform_location;
     GLint _camera_transform_location;
     GLint _camera_position_location;
+    GLuint _perlin_noise_texture;
 };
 
 #endif // PERLINNOISESHADER_H

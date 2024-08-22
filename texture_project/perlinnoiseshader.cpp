@@ -33,3 +33,11 @@ bool PerlinNoiseShader::load_done()
     return  (_model_transform_location != INVALID_UNIFORM_LOCATION) &&
             (_camera_transform_location != INVALID_UNIFORM_LOCATION);
 }
+
+void PerlinNoiseShader::texture(GLuint texture) {
+    _perlin_noise_texture = texture;
+}
+
+int PerlinNoiseShader::texture() {
+    return _perlin_noise_texture;
+}
