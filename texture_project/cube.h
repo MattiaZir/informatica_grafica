@@ -25,7 +25,9 @@ public:
 
   void bind_texture(int texture_id);
 
-private:
+  unsigned char generate_perlin_noise();
+
+ private:
   GLuint _VAO;       // Vertex Array Object
   Texture _texture;  // Texture
   bool _initialized; // Oggetto usabile?

@@ -36,7 +36,17 @@ void Cube::init(void) {
   }
 
   // Invece che caricarla da qua, magari prendere l'output del fragment shader?
-  _texture.load("sagm.jpg");
+  //_texture.load("sagm.jpg");
+
+  unsigned char* imageData = (unsigned char*)malloc(1024 * 1024 * 3 * sizeof(unsigned char));
+
+  for (int i = 0; i < 1024 * 1024 * 3; i += 3) {
+      imageData[i] = rand()*255;      // Red
+      imageData[i + 1] = rand()*255;  // Green
+      imageData[i + 2] = rand()*255;  // Blue
+  }
+
+  _texture.load(imageData, 1024, 1024, GL_RGB);
 
   Vertex Vertices[] = {
     Vertex(glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3( 0.0f,  0.0f, -1.0f), glm::vec2(1,0)),

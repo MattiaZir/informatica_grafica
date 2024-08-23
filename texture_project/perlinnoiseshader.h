@@ -16,6 +16,10 @@ public:
     bool load_shaders();
     bool load_done();
 
+    void install_shaders();
+
+    GLuint generate_perlin_texture();
+
     void texture(GLuint texture);
     int texture();
 

@@ -17,7 +17,7 @@ MyShaderClass myshaders;
 PerlinNoiseShader perlinshaders;
 Cube cube;
 
-unsigned char MODEL_TO_RENDER = 'c';
+unsigned char MODEL_TO_RENDER = 'r';
 
 
 /**
@@ -128,30 +128,6 @@ void create_scene() {
 
 }
 
-void generate_perlin_noise()
-{
-  int height = 1024, width = 1024;
-
-  // Creo la finestra magica
-  GLuint fbo;
-  glGenFramebuffers(1, &fbo);
-  glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-
-  // Metto lo sticker sulla finestra magica
-  unsigned int textureColorbuffer;
-  glGenTextures(1, &textureColorbuffer);
-  glBindTexture(GL_TEXTURE_2D, textureColorbuffer);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 800, 600, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glBindTexture(GL_TEXTURE_2D, 0);
-
-  // Attacco lo sticker alla finestra magica
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorbuffer, 0);
-  glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-
-}
-
 
 void render_cube() {
   LocalTransform modelT;
@@ -174,6 +150,7 @@ void MyRenderScene() {
 
   switch (MODEL_TO_RENDER) {
     case 'c': render_cube(); break;
+    case 'r': perlinshaders.generate_perlin_texture();
   }
 
   glutSwapBuffers();
@@ -249,6 +226,9 @@ void MyKeyboard(unsigned char key, int x, int y) {
       );
     break;
      case 'c':
+      MODEL_TO_RENDER = key;
+      break;
+     case 'r':
       MODEL_TO_RENDER = key;
       break;
   }
