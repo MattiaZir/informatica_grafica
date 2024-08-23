@@ -1,22 +1,19 @@
 #include "perlinnoiseshader.h"
 
 struct Vertex {
-    glm::vec3 position; ///< Coordinate spaziali
-    glm::vec3 normal;   ///< Normale
+    glm::vec2 position; ///< Coordinate spaziali
     glm::vec2 textcoord;///< Coordinate di texture
 
     Vertex(
-      float x, float y, float z,
-      float xn, float yn, float zn,
+      float x, float y,
       float s, float t) {
 
-      position = glm::vec3(x,y,z);
-      normal = glm::vec3(xn,yn,zn);
+      position = glm::vec2(x,y);
       textcoord = glm::vec2(s,t);
     }
 
-    Vertex(const glm::vec3 &xyz, const glm::vec3 &norm, const glm::vec2 &txt)
-      : position(xyz), normal(norm), textcoord(txt) {}
+    Vertex(const glm::vec2 &xy, const glm::vec2 &txt)
+      : position(xy), textcoord(txt) {}
 };
 
 // void PerlinNoiseShader::set_model_transform(const glm::mat4 &transform)
@@ -61,13 +58,22 @@ void PerlinNoiseShader::install_shaders()
 
 GLuint PerlinNoiseShader::generate_perlin_texture()
 {
-    GLfloat vertices[] =
+    // GLfloat vertices[] =
+    // {
+    // //  X       Y       R      G     B
+    //     +1.0f, -1.0f, +0.5f, +0.1f, +0.1f,
+    //     +1.0f, +1.0f, +0.3f, +0.5f, +0.5f,
+    //     -1.0f, +1.0f, +0.0f, +0.4f, +0.0f,
+    //     -1.0f, -1.0f, +0.0f, +0.3f, +0.0f
+    // };
+
+    Vertex vertices[] =
     {
-    //  X       Y       R      G     B
-        +1.0f, -1.0f, +0.5f, +0.1f, +0.1f,
-        +1.0f, +1.0f, +0.3f, +0.5f, +0.5f,
-        -1.0f, +1.0f, +0.0f, +0.4f, +0.0f,
-        -1.0f, -1.0f, +0.0f, +0.3f, +0.0f
+        // how should texture coords be handled?
+        Vertex(glm::vec2(+1.0f, -1.0f), glm::vec2(1.0f, 0.0f)),
+        Vertex(glm::vec2(+1.0f, +1.0f), glm::vec2(1.0f,1.0f)),
+        Vertex(glm::vec2(-1.0f, +1.0f), glm::vec2(0.0f,1.0f)),
+        Vertex(glm::vec2(-1.0f, -1.0f), glm::vec2(0.0f,0.0f)),
     };
 
     GLuint VBO;
@@ -76,13 +82,18 @@ GLuint PerlinNoiseShader::generate_perlin_texture()
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), 0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
 
     glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (char*) (2 * sizeof(float)));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (char*) (2 * sizeof(float)));
 
     init();
     enable();
+
+    //int timeLocation = get_uniform_location("u_time");
+    int resolutionLocation = get_uniform_location("u_resolution");
+    //glUniform1f(timeLocation, glutGet(GLUT_ELAPSED_TIME));
+    glUniform2f(resolutionLocation, 1024, 1024);
 
     GLushort indices[] =
     {
@@ -97,6 +108,8 @@ GLuint PerlinNoiseShader::generate_perlin_texture()
 
     glViewport(0, 0, 1024, 1024);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
+
+    return 0;
 }
 
 void PerlinNoiseShader::texture(GLuint texture) {

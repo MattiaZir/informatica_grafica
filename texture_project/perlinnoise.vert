@@ -1,11 +1,11 @@
 #version 330
 
 in layout(location = 0) vec2 aPos;
-in layout(location = 1) vec3 aColor;
+in layout(location = 1) vec2 aTexPos;
 
 // out vec3 fragment_normal;
 // out vec3 fragment_position;
-out vec3 fragColor;
+// out vec3 fragColor;
 
 void main()
 {
