@@ -1,4 +1,5 @@
 #include "perlinnoiseshader.h"
+#include <iostream>
 
 struct Vertex {
     glm::vec2 position; ///< Coordinate spaziali
@@ -58,15 +59,33 @@ void PerlinNoiseShader::install_shaders()
 
 GLuint PerlinNoiseShader::generate_perlin_texture()
 {
-    // GLfloat vertices[] =
-    // {
-    // //  X       Y       R      G     B
-    //     +1.0f, -1.0f, +0.5f, +0.1f, +0.1f,
-    //     +1.0f, +1.0f, +0.3f, +0.5f, +0.5f,
-    //     -1.0f, +1.0f, +0.0f, +0.4f, +0.0f,
-    //     -1.0f, -1.0f, +0.0f, +0.3f, +0.0f
-    // };
 
+    #pragma region framebuffer setup
+    GLuint fbo;
+    glGenFramebuffers(1, &fbo);
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    #pragma endregion
+
+    #pragma region texture setup
+    GLuint texture_color_buffer;
+    glGenTextures(1, &texture_color_buffer);
+    glBindTexture(GL_TEXTURE_2D, texture_color_buffer);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1024, 1024, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    // attach texture to fbo
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture_color_buffer, 0);
+    #pragma endregion
+
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+        std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    #pragma region Quad Setup
     Vertex vertices[] =
     {
         // how should texture coords be handled?
@@ -86,15 +105,18 @@ GLuint PerlinNoiseShader::generate_perlin_texture()
 
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (char*) (2 * sizeof(float)));
+    #pragma endregion
 
+    #pragma region Shader Noise setup
     init();
     enable();
 
-    //int timeLocation = get_uniform_location("u_time");
     int resolutionLocation = get_uniform_location("u_resolution");
-    //glUniform1f(timeLocation, glutGet(GLUT_ELAPSED_TIME));
     glUniform2f(resolutionLocation, 1024, 1024);
 
+    #pragma endregion
+
+    #pragma region draw
     GLushort indices[] =
     {
         0, 1, 2,
@@ -106,10 +128,22 @@ GLuint PerlinNoiseShader::generate_perlin_texture()
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
     glViewport(0, 0, 1024, 1024);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
 
-    return 0;
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glViewport(0, 0, 1024, 1024);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    #pragma endregion
+
+      GLenum error = glGetError();
+    if (error != GL_NO_ERROR) {
+        std::cerr << "OpenGL Error: " << error << std::endl;
+    }
+
+    return texture_color_buffer;
 }
 
 void PerlinNoiseShader::texture(GLuint texture) {

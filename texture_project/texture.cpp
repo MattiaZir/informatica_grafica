@@ -98,6 +98,18 @@ bool Texture::load(const unsigned char* image, int width, int height, int format
   return true;
 }
 
+void Texture::setTextureID(GLuint textureID) {
+    // Ensure the texture ID is valid and update the class members
+    if (textureID > 0) {
+        _texture = textureID;
+        _valid = true;
+    } else {
+        _texture = -1;
+        _valid = false;
+    }
+}
+
+
 void Texture::bind(int TextureUnit) const {
   GLenum unit = GL_TEXTURE0 + TextureUnit;
 

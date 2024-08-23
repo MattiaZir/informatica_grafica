@@ -23,7 +23,7 @@ public:
   bool shaders(MyShaderClass &shader);
   MyShaderClass &shaders();
 
-  void bind_texture(int texture_id);
+  void swap_textures(int texture_id);
 
   unsigned char generate_perlin_noise();
 

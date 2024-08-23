@@ -33,7 +33,9 @@ public:
 	bool load(const std::string& FileName);
 	bool load(const unsigned char* image, int width, int height, int format);
 
-	/**
+	void setTextureID(GLuint textureID);
+
+        /**
 	Attiva la textureUnit indicata e binda la texture ad essa.
 	*/
 	void bind(int TextureUnit) const;
