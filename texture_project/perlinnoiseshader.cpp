@@ -19,23 +19,23 @@ struct Vertex {
       : position(xyz), normal(norm), textcoord(txt) {}
 };
 
-void PerlinNoiseShader::set_model_transform(const glm::mat4 &transform)
-{
-    // setta la matrice di trasformazione nel vertex shader
-    glUniformMatrix4fv(_model_transform_location, 1, GL_FALSE, const_cast<float *>(&transform[0][0]));
-}
+// void PerlinNoiseShader::set_model_transform(const glm::mat4 &transform)
+// {
+//     // setta la matrice di trasformazione nel vertex shader
+//     glUniformMatrix4fv(_model_transform_location, 1, GL_FALSE, const_cast<float *>(&transform[0][0]));
+// }
 
-void PerlinNoiseShader::set_camera_transform(const glm::mat4 &transform)
-{
-    // setta la matrice di trasformazione della camera nel vertex shader
-    glUniformMatrix4fv(_camera_transform_location, 1, GL_FALSE, const_cast<float *>(&transform[0][0]));
-}
+// void PerlinNoiseShader::set_camera_transform(const glm::mat4 &transform)
+// {
+//     // setta la matrice di trasformazione della camera nel vertex shader
+//     glUniformMatrix4fv(_camera_transform_location, 1, GL_FALSE, const_cast<float *>(&transform[0][0]));
+// }
 
-void PerlinNoiseShader::set_camera_position(const glm::vec3 &pos)
-{
-    // setta la posizione della camera nel vertex shader
-    glUniform3fv(_camera_position_location, 1, const_cast<float *>(&pos[0]));
-}
+// void PerlinNoiseShader::set_camera_position(const glm::vec3 &pos)
+// {
+//     // setta la posizione della camera nel vertex shader
+//     glUniform3fv(_camera_position_location, 1, const_cast<float *>(&pos[0]));
+// }
 
 bool PerlinNoiseShader::load_shaders()
 {
@@ -45,63 +45,18 @@ bool PerlinNoiseShader::load_shaders()
 
 bool PerlinNoiseShader::load_done()
 {
-    _model_transform_location = get_uniform_location("Model2World");
-    _camera_transform_location = get_uniform_location("World2Camera");
-    _camera_transform_location = get_uniform_location("World2Camera");
+    // _model_transform_location = get_uniform_location("Model2World");
+    // _camera_transform_location = get_uniform_location("World2Camera");
+    // _camera_transform_location = get_uniform_location("World2Camera");
 
-    return  (_model_transform_location != INVALID_UNIFORM_LOCATION) &&
-            (_camera_transform_location != INVALID_UNIFORM_LOCATION);
+    // return  (_model_transform_location != INVALID_UNIFORM_LOCATION) &&
+    //         (_camera_transform_location != INVALID_UNIFORM_LOCATION);
+
+    return true;
 }
 
 void PerlinNoiseShader::install_shaders()
 {
-    #pragma region SHADER CODE
-    char* vertexShaderCode =
-    "#version 330\r\n"
-    ""
-    "in layout(location=0) vec2 position;"
-    "in layout(location=1) vec3 vertexColor;"
-    ""
-    "out vec3 theColor;"
-    ""
-    "void main()"
-    "{"
-    "   gl_Position = vec4(position, 0.0, 1.0);"
-    "   theColor = vertexColor;"
-    "}";
-
-    char* fragmentShaderCode =
-    "#version 330\r\n"
-    ""
-    "out vec4 daColor;"
-    "in vec3 theColor;"
-    ""
-    "void main()"
-    "{"
-    "   daColor = vec4(theColor, 1.0);"
-    "}";
-    #pragma endregion
-
-    GLuint vertex_shader_id =   glCreateShader(GL_VERTEX_SHADER);
-    GLuint fragment_shader_id = glCreateShader(GL_FRAGMENT_SHADER);
-
-    char* adapter[1];
-    adapter[0] = vertexShaderCode;
-    glShaderSource(vertex_shader_id, 1, (const GLchar**) adapter, 0);
-
-    adapter[0] = fragmentShaderCode;
-    glShaderSource(fragment_shader_id, 1, (const GLchar**) adapter, 0);
-
-    glCompileShader(vertex_shader_id);
-    glCompileShader(fragment_shader_id);
-
-    GLuint program_id = glCreateProgram();
-    glAttachShader(program_id, vertex_shader_id);
-    glAttachShader(program_id, fragment_shader_id);
-    glLinkProgram(program_id);
-
-    glUseProgram(program_id);
-
 }
 
 GLuint PerlinNoiseShader::generate_perlin_texture()
@@ -126,7 +81,8 @@ GLuint PerlinNoiseShader::generate_perlin_texture()
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (char*) (2 * sizeof(float)));
 
-    install_shaders();
+    init();
+    enable();
 
     GLushort indices[] =
     {

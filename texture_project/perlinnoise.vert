@@ -1,12 +1,11 @@
 #version 330
 
-layout (location = 0) in vec3 position;
-layout (location = 1) in vec3 normal;
-layout (location = 2) in vec2 textcoord;
+in layout(location = 0) vec2 aPos;
+in layout(location = 1) vec3 aColor;
 
 // out vec3 fragment_normal;
 // out vec3 fragment_position;
-out vec2 fragment_textcoord;
+out vec3 fragColor;
 
 void main()
 {
@@ -16,5 +15,5 @@ void main()
 
     // fragment_normal = (Model2WorldTI * vec4(normal,0.0)).xyz;
     // fragment_position = (Model2World * vec4(position,1.0)).xyz;
-    fragment_textcoord = textcoord;
+    gl_Position = vec4(aPos,0.0, 1.0);
 }

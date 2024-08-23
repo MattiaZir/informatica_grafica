@@ -45,5 +45,5 @@ void main()
 {
 	// La funzione texture ritorna un vec4.
 
-	out_color = vec4(0,255,0,0);
+	out_color = vec4(0.0, 1.0, 0.0, 1.0);
 }
