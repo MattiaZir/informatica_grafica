@@ -14,7 +14,7 @@
 #include "mesh.h"
 
 MyShaderClass myshaders;
-PerlinNoiseShader perlinshaders;
+//PerlinNoiseShader perlinshaders;
 Cube cube;
 
 unsigned char MODEL_TO_RENDER = 'c';
@@ -144,10 +144,10 @@ void render_cube() {
   myshaders.set_camera_position(global.camera.position());
   cube.shaders(myshaders);
 
-  if (perlin_texture_id)
-  {
-    cube.swap_textures(perlin_texture_id);
-  }
+  // if (perlin_texture_id)
+  // {
+  //   cube.swap_textures(perlin_texture_id);
+  // }
 
 
   cube.render();
@@ -158,7 +158,7 @@ void MyRenderScene() {
 
   switch (MODEL_TO_RENDER) {
     case 'c': render_cube(); break;
-    case 'r': perlin_texture_id = perlinshaders.generate_perlin_texture(); MODEL_TO_RENDER = 'c'; break;
+    case 'r': cube.generate_perlin_noise(); MODEL_TO_RENDER = 'c'; break;
   }
 
   glutSwapBuffers();

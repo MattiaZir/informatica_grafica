@@ -25,14 +25,14 @@ public:
 
   void swap_textures(int texture_id);
 
-  unsigned char generate_perlin_noise();
-
+  void generate_perlin_noise();
  private:
   GLuint _VAO;       // Vertex Array Object
   Texture _texture;  // Texture
   bool _initialized; // Oggetto usabile?
 
   MyShaderClass _shaders; // Shaders da usare con Cube
+
 
   /**
     Inizializzazione degli oggetti OpenGL. E' fatta in un secondo tempo
@@ -41,6 +41,11 @@ public:
     dalla render().
   */
   void init(void);
+
+  glm::vec2 randomGradient(int ix, int iy);
+  float dotGridGradient(int ix, int iy, float x, float y);
+  float interpolate(float a0, float a1, float w);
+  float perlin(float x, float y);
 
   // Blocchiamo le operazioni di copia di una istanza di Cube:
   // non possiamo condividere un VAO
