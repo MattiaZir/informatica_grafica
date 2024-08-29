@@ -140,11 +140,11 @@ void Cube::swap_textures(int texture_id) {
 }
 
 void Cube::generate_perlin_noise() {
-  int width = 32, height = 32;
+  int width = 512, height = 512;
   unsigned char* imageData = (unsigned char*) malloc(width * height * 4 * sizeof(unsigned char));
 
-  const int OCTAVES = 8;
-  const int GRID_SIZE = 4; // Frequenza base del perlin noise
+  const int OCTAVES = 12;
+  const int GRID_SIZE = 100; // Frequenza base del perlin noise
 
   for (int x = 0; x < width; x++)
   {
@@ -174,11 +174,11 @@ void Cube::generate_perlin_noise() {
         value = -1.0f;
 
       // convert from clamped values to 0-255 range
-      int color = (int) (((value + 1.0f) * 0.5f) *255);
+      glm::vec3 color = perlin_noise_to_color(value);
 
-      imageData[index] = color;
-      imageData[index + 1] = color;
-      imageData[index + 2] = color;
+      imageData[index] =  static_cast<unsigned char>(color.r * 255);
+      imageData[index + 1] = static_cast<unsigned char>(color.g * 255);
+      imageData[index + 2] = static_cast<unsigned char>(color.b * 255);
       imageData[index + 3] = 255;
     }
   }
@@ -187,6 +187,30 @@ void Cube::generate_perlin_noise() {
 }
 
 // TODO: Sposta in una classe a parte.
+
+glm::vec3 Cube::perlin_noise_to_color(float value)
+{
+  // Normalizzo tra 0 e 1
+  value = (value + 1.0f) * 0.5f;
+
+  glm::vec3 deepWater(0.0f, 0.0f, 0.5f); // Dark Blue
+  glm::vec3 shallowWater(0.0f, 0.5f, 1.0f); // Light Blue
+  glm::vec3 veryShallowWater(0.0f, 0.75f, 1.0f); // Greenish Blue
+
+  // Calcolo il colore con un gradiente semplice
+  glm::vec3 color;
+
+    // Interpolate between colors based on the value
+    if (value < 0.5f) {
+        float t = value / 0.5f;
+        color = glm::mix(deepWater, shallowWater, t);
+    } else {
+        float t = (value - 0.5f) / 0.5f;
+        color = glm::mix(shallowWater, veryShallowWater, t);
+    }
+
+  return color;
+}
 
 glm::vec2 Cube::randomGradient(int ix, int iy) {
     // No precomputed gradients mean this works for any number of grid coordinates

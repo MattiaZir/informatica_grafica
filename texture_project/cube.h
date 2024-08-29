@@ -42,6 +42,7 @@ public:
   */
   void init(void);
 
+  glm::vec3 perlin_noise_to_color(float value);
   glm::vec2 randomGradient(int ix, int iy);
   float dotGridGradient(int ix, int iy, float x, float y);
   float interpolate(float a0, float a1, float w);
