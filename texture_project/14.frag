@@ -45,18 +45,21 @@ uniform vec3 CameraPosition;
 
 uniform sampler2D TextSampler;
 
+uniform sampler2D BumpSampler;
+
 out vec4 out_color;
 
 void main()
 {
 	// La funzione texture ritorna un vec4.
 	vec4 material_color = texture(TextSampler, fragment_textcoord);
+	float height = texture(BumpSampler, fragment_textcoord).r;
 
 	vec3 amb =  (AmbientLight.color * AmbientLight.intensity);
 
 	vec3 dif = vec3(0,0,0);
 
-	vec3 normal = normalize(fragment_normal);
+	vec3 normal = normalize(fragment_normal + vec3(height * 2.0 - 1.0, height * 2.0 - 1.0, 0.0));
 
 	float cosTheta = dot(normal,-DiffusiveLight.direction);
 

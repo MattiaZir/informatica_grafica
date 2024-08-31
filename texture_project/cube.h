@@ -29,6 +29,7 @@ public:
  private:
   GLuint _VAO;       // Vertex Array Object
   Texture _texture;  // Texture
+  Texture _bump_map;  // Bump map texture
   bool _initialized; // Oggetto usabile?
 
   MyShaderClass _shaders; // Shaders da usare con Cube

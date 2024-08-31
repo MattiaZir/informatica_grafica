@@ -35,6 +35,10 @@ void MyShaderClass::set_sampler(int sampler_id) {
   glUniform1i(_texture_sampler_location, sampler_id);
 }
 
+void MyShaderClass::set_bump_sampler(int sampler_id) {
+  glUniform1i(_bump_sampler_location, sampler_id);
+}
+
 bool MyShaderClass::load_shaders() {
   return  add_shader(GL_VERTEX_SHADER,"14.vert") &&
           add_shader(GL_FRAGMENT_SHADER,"14.frag");
@@ -55,7 +59,8 @@ bool MyShaderClass::load_done() {
   _specular_shininess_location  = get_uniform_location("SpecularLight.shininess");
   _camera_position_location     = get_uniform_location("CameraPosition");
 
-  //_texture_sampler_location     = get_uniform_location("TextSampler");
+  _texture_sampler_location     = get_uniform_location("TextSampler");
+  _bump_sampler_location        = get_uniform_location("BumpSampler");
 
   return  (_model_transform_location != INVALID_UNIFORM_LOCATION) &&
           (_camera_transform_location != INVALID_UNIFORM_LOCATION) &&
@@ -67,5 +72,6 @@ bool MyShaderClass::load_done() {
           (_specular_intensity_location != INVALID_UNIFORM_LOCATION) &&
           (_specular_shininess_location != INVALID_UNIFORM_LOCATION) &&
           (_camera_position_location != INVALID_UNIFORM_LOCATION) &&
-          (_texture_sampler_location != INVALID_UNIFORM_LOCATION);
+          (_texture_sampler_location != INVALID_UNIFORM_LOCATION) &&
+          (_bump_sampler_location != INVALID_UNIFORM_LOCATION);
 }

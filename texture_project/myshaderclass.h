@@ -6,10 +6,10 @@
 
 /**
     Classe che include le funzionalità specifiche legate agli shader da usare
-    nell'applicazione. 
+    nell'applicazione.
     Sono stati overloadati i metodi load_shaders e load_done.
     Sono stati inseriti due metodi pubblici per settare la matrice di trasformazione
-    delle coordinate dei vertici. 
+    delle coordinate dei vertici.
 */
 class MyShaderClass : public ShaderClass {
 public:
@@ -17,14 +17,14 @@ public:
     /**
         Setta la matrice di trasformazione nel vertex shader
 
-        @param transform matrice 4x4 di trasformazione  
+        @param transform matrice 4x4 di trasformazione
     */
     void set_model_transform(const glm::mat4 &transform);
 
     /**
         Setta la matrice di trasformazione di camera completa
 
-        @param transform matrice 4x4 di trasformazione  
+        @param transform matrice 4x4 di trasformazione
     */
     void set_camera_transform(const glm::mat4 &transform);
 
@@ -52,8 +52,9 @@ public:
     void set_camera_position(const glm::vec3 &pos);
 
     void set_sampler(int sampler_id);
-private:
+    void set_bump_sampler(int sampler_id);
 
+   private:
     /**
         Metodo per il caricamento degli shader
 
@@ -62,8 +63,8 @@ private:
     virtual bool load_shaders();
 
     /**
-        Metodo che recupera tutte le location delle variabili uniform 
-        negli shader caricati.  
+        Metodo che recupera tutte le location delle variabili uniform
+        negli shader caricati.
 
         @return se le operazioni post-load sono andate a buon fine
     */
@@ -84,6 +85,7 @@ private:
     GLint _camera_position_location;
 
     GLint _texture_sampler_location;
+    GLint _bump_sampler_location;
 
 };
 #endif

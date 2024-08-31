@@ -35,7 +35,8 @@ void Cube::init(void) {
     exit(0);
   }
 
-  _texture.load("sagm.jpg");
+  _texture.load("test.png");
+  _bump_map.load("bumpbrick.jpg");
 
   Vertex Vertices[] = {
     Vertex(glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3( 0.0f,  0.0f, -1.0f), glm::vec2(1,0)),
@@ -110,9 +111,11 @@ void Cube::render(void) {
 
   glBindVertexArray(_VAO);
 
-  //_shaders.set_sampler(0);
+  _shaders.set_sampler(0);
+  _shaders.set_bump_sampler(1);
 
   _texture.bind(0);
+  _bump_map.bind(1);
 
   glEnableVertexAttribArray(0);
   glEnableVertexAttribArray(1);
@@ -142,9 +145,10 @@ void Cube::swap_textures(int texture_id) {
 void Cube::generate_perlin_noise() {
   int width = 512, height = 512;
   unsigned char* imageData = (unsigned char*) malloc(width * height * 4 * sizeof(unsigned char));
+  unsigned char* bumpData  = (unsigned char*) malloc(width * height * 4 * sizeof(unsigned char));
 
   const int OCTAVES = 12;
-  const int GRID_SIZE = 100; // Frequenza base del perlin noise
+  const int GRID_SIZE = 40; // Frequenza base del perlin noise
 
   for (int x = 0; x < width; x++)
   {
@@ -165,7 +169,7 @@ void Cube::generate_perlin_noise() {
       }
 
       // contrasto
-      value *= 1.2f;
+      value *= 1.0f;
 
       //clipping
       if (value > 1.0f)
@@ -180,10 +184,18 @@ void Cube::generate_perlin_noise() {
       imageData[index + 1] = static_cast<unsigned char>(color.g * 255);
       imageData[index + 2] = static_cast<unsigned char>(color.b * 255);
       imageData[index + 3] = 255;
+
+      bumpData[index] =  255;
+      bumpData[index + 1] = value * 255;
+      bumpData[index + 2] = value * 255;
+      bumpData[index + 3] = 255;
+
     }
   }
 
   _texture.load(imageData, width, height, GL_RGBA);
+  _bump_map.load(bumpData, width, height, GL_RGBA);
+  free(imageData);
 }
 
 // TODO: Sposta in una classe a parte.
