@@ -173,17 +173,33 @@ void MyKeyboard(unsigned char key, int x, int y) {
       return;
     break;
 
+    // case 'a':
+    //   global.gradY -= global.SPEED;
+    // break;
+    // case 'd':
+    //   global.gradY += global.SPEED;
+    // break;
+    // case 'w':
+    //   global.gradX -= global.SPEED;
+    // break;
+    // case 's':
+    //   global.gradX += global.SPEED;
+    // break;
+
     case 'a':
-      global.gradY -= global.SPEED;
+      global.diffusive_light.direction(global.diffusive_light.direction() - glm::vec3(0,0.01,0));
     break;
+
     case 'd':
-      global.gradY += global.SPEED;
+      global.diffusive_light.direction(global.diffusive_light.direction() + glm::vec3(0,0.01,0));
     break;
-    case 'w':
-      global.gradX -= global.SPEED;
-    break;
+
     case 's':
-      global.gradX += global.SPEED;
+      global.diffusive_light.direction(global.diffusive_light.direction() - glm::vec3(0.01,0,0));
+    break;
+
+    case 'w':
+      global.diffusive_light.direction(global.diffusive_light.direction() + glm::vec3(0.01,0,0));
     break;
 
     // Variamo l'intensità di luce ambientale

@@ -26,7 +26,7 @@ float AmbientLight::intensity() const {
 
 
 DiffusiveLight::DiffusiveLight() :
-	_color(glm::vec3(1.0f,1.0f,1.0f)), 
+	_color(glm::vec3(1.0f,1.0f,1.0f)),
 	_direction(glm::vec3(0.0f,-1.0f,0.0f)),
 	_intensity(1.0f) {}
 
@@ -49,6 +49,10 @@ glm::vec3 DiffusiveLight::color() const {
 
 glm::vec3 DiffusiveLight::direction() const {
 	return _direction;
+}
+
+void DiffusiveLight::direction(glm::vec3 direction) {
+	_direction = direction;
 }
 
 float DiffusiveLight::intensity() const {

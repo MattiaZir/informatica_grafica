@@ -35,7 +35,7 @@ void Cube::init(void) {
     exit(0);
   }
 
-  _texture.load("test.png");
+  _texture.load("brick.jpg");
   _bump_map.load("bumpbrick.jpg");
 
   Vertex Vertices[] = {
@@ -148,7 +148,7 @@ void Cube::generate_perlin_noise() {
   unsigned char* bumpData  = (unsigned char*) malloc(width * height * 4 * sizeof(unsigned char));
 
   const int OCTAVES = 12;
-  const int GRID_SIZE = 40; // Frequenza base del perlin noise
+  const int GRID_SIZE = 100; // Frequenza base del perlin noise
 
   for (int x = 0; x < width; x++)
   {
@@ -169,7 +169,7 @@ void Cube::generate_perlin_noise() {
       }
 
       // contrasto
-      value *= 1.0f;
+      value *= 1.1f;
 
       //clipping
       if (value > 1.0f)
@@ -179,15 +179,16 @@ void Cube::generate_perlin_noise() {
 
       // convert from clamped values to 0-255 range
       glm::vec3 color = perlin_noise_to_color(value);
+      float bw_value = (value + 1.0f) * 0.5f;
 
       imageData[index] =  static_cast<unsigned char>(color.r * 255);
       imageData[index + 1] = static_cast<unsigned char>(color.g * 255);
       imageData[index + 2] = static_cast<unsigned char>(color.b * 255);
       imageData[index + 3] = 255;
 
-      bumpData[index] =  255;
-      bumpData[index + 1] = value * 255;
-      bumpData[index + 2] = value * 255;
+      bumpData[index] =  bw_value * 255;
+      bumpData[index + 1] = bw_value * 255;
+      bumpData[index + 2] = bw_value * 255;
       bumpData[index + 3] = 255;
 
     }
@@ -196,6 +197,7 @@ void Cube::generate_perlin_noise() {
   _texture.load(imageData, width, height, GL_RGBA);
   _bump_map.load(bumpData, width, height, GL_RGBA);
   free(imageData);
+  free(bumpData);
 }
 
 // TODO: Sposta in una classe a parte.
@@ -208,6 +210,8 @@ glm::vec3 Cube::perlin_noise_to_color(float value)
   glm::vec3 deepWater(0.0f, 0.0f, 0.5f); // Dark Blue
   glm::vec3 shallowWater(0.0f, 0.5f, 1.0f); // Light Blue
   glm::vec3 veryShallowWater(0.0f, 0.75f, 1.0f); // Greenish Blue
+
+
 
   // Calcolo il colore con un gradiente semplice
   glm::vec3 color;

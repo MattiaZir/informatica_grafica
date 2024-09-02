@@ -87,6 +87,11 @@ public:
     glm::vec3 direction() const;
 
     /**
+     * Imposta la direzione
+     */
+    void direction(glm::vec3 direction);
+
+    /**
         Ritorna l'intensità della luce
     */
     float intensity() const;
@@ -100,13 +105,13 @@ class SpecularLight {
 public:
 
   /**
-    Setta la luce alla massima intensità. La posizione della camera è quella di 
+    Setta la luce alla massima intensità. La posizione della camera è quella di
     default. La shininess è settata a 30.
   */
   SpecularLight();
 
   /**
-    Setta la luce speculare 
+    Setta la luce speculare
     @param col colore dela luce
     @param i intensità della luce
   */
