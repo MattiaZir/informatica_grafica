@@ -2,7 +2,7 @@
 # @^ lista delle dipendenze
 
 CC = g++
-CCFLAGS = -O3 -s -DNDEBUG
+CCFLAGS = -O3 -s -DNDEBUG -fopenmp
 
 ifeq ($(OS),Windows_NT)
 	BASEDIR = ../base

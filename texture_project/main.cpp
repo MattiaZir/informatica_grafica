@@ -45,6 +45,18 @@ struct global_struct {
 } global;
 
 
+struct perlin_params {
+  int width = 512;
+  int height = 512;
+  int octaves = 1;
+  int grid_size = 100;
+
+  int GRID_MODIFIER = 10;
+  int SIZE_MODIFIER = 256;
+
+} perlin_params;
+
+
 
 /**
 Prototipi della nostre funzioni di callback.
@@ -158,10 +170,17 @@ void MyRenderScene() {
 
   switch (MODEL_TO_RENDER) {
     case 'c': render_cube(); break;
-    case 'r': cube.generate_perlin_noise(); MODEL_TO_RENDER = 'c'; break;
+    case 'r':
+      cube.generate_perlin_noise(
+        perlin_params.width,
+        perlin_params.height,
+        perlin_params.octaves,
+        perlin_params.grid_size);
+      MODEL_TO_RENDER = 'c'; break;
   }
 
   glutSwapBuffers();
+  glutPostRedisplay();
 }
 
 // Funzione globale che si occupa di gestire l'input da tastiera.
@@ -242,6 +261,28 @@ void MyKeyboard(unsigned char key, int x, int y) {
       global.specular_light.inc_shine(1);
     break;
 
+    case 'o':
+      perlin_params.width += perlin_params.SIZE_MODIFIER;
+      perlin_params.height += perlin_params.SIZE_MODIFIER;
+      MODEL_TO_RENDER = 'r';
+    break;
+
+    case 'l':
+      perlin_params.width = std::max(perlin_params.SIZE_MODIFIER, perlin_params.width - perlin_params.SIZE_MODIFIER);
+      perlin_params.height = std::max(perlin_params.SIZE_MODIFIER, perlin_params.width - perlin_params.SIZE_MODIFIER);
+      MODEL_TO_RENDER = 'r';
+    break;
+
+    case 'i':
+      perlin_params.grid_size += perlin_params.GRID_MODIFIER;
+      MODEL_TO_RENDER = 'r';
+    break;
+
+    case 'k':
+      perlin_params.grid_size = std::max(perlin_params.GRID_MODIFIER, perlin_params.grid_size - perlin_params.GRID_MODIFIER);
+      MODEL_TO_RENDER = 'r';
+    break;
+
     case ' ': // Reimpostiamo la camera
       global.camera.set_camera(
           glm::vec3(0, 0, 0),
@@ -249,19 +290,35 @@ void MyKeyboard(unsigned char key, int x, int y) {
           glm::vec3(0, 1, 0)
       );
     break;
-     case 'c':
-      MODEL_TO_RENDER = key;
-      break;
-     case 'r':
-      MODEL_TO_RENDER = key;
-      break;
+
+    case 'c':
+    MODEL_TO_RENDER = key;
+    break;
+    case 'r':
+    MODEL_TO_RENDER = key;
+    break;
   }
 
   glutPostRedisplay();
 }
 
 void MySpecialKeyboard(int Key, int x, int y) {
-  global.camera.onSpecialKeyboard(Key);
+  switch (Key) {
+    case GLUT_KEY_PAGE_UP:
+      perlin_params.octaves++;
+      MODEL_TO_RENDER = 'r';
+    break;
+
+    case GLUT_KEY_PAGE_DOWN:
+      perlin_params.octaves = std::max(1, perlin_params.octaves - 1);
+      MODEL_TO_RENDER = 'r';
+    break;
+
+    default:
+    global.camera.onSpecialKeyboard(Key);
+    break;
+  }
+
   glutPostRedisplay();
 }
 
@@ -280,6 +337,10 @@ void MyClose(void) {
 
   // A schermo intero dobbiamo uccidere l'applicazione.
   exit(0);
+}
+
+void MyIdle(void) {
+  glutPostRedisplay();
 }
 
 int main(int argc, char* argv[])

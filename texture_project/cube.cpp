@@ -142,13 +142,9 @@ void Cube::swap_textures(int texture_id) {
   _texture.setTextureID(texture_id);
 }
 
-void Cube::generate_perlin_noise() {
-  int width = 512, height = 512;
+void Cube::generate_perlin_noise(int width = 512, int height = 512, int octaves = 12, int grid_size = 100) {
   unsigned char* imageData = (unsigned char*) malloc(width * height * 4 * sizeof(unsigned char));
   unsigned char* bumpData  = (unsigned char*) malloc(width * height * 4 * sizeof(unsigned char));
-
-  const int OCTAVES = 12;
-  const int GRID_SIZE = 100; // Frequenza base del perlin noise
 
   for (int x = 0; x < width; x++)
   {
@@ -160,9 +156,9 @@ void Cube::generate_perlin_noise() {
       float frequency = 1;
       float amplitude = 1;
 
-      for (int i = 0; i < OCTAVES; i++)
+      for (int i = 0; i < octaves; i++)
       {
-        value += perlin(x * frequency / GRID_SIZE, y * frequency / GRID_SIZE) * amplitude;
+        value += perlin(x * frequency / grid_size, y * frequency / grid_size) * amplitude;
 
         frequency *= 2;
         amplitude /= 2;

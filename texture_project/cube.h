@@ -25,7 +25,7 @@ public:
 
   void swap_textures(int texture_id);
 
-  void generate_perlin_noise();
+  void generate_perlin_noise(int width, int height, int octaves, int grid_size);
  private:
   GLuint _VAO;       // Vertex Array Object
   Texture _texture;  // Texture
