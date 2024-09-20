@@ -39,8 +39,6 @@ bool Texture::load(const std::string& FileName) {
   }
   else return false;
 
-  //std::cout<<channels<<std::endl;
-
   if (image==nullptr) {
     std::cerr<<" Failed to load texture " << FileName << std::endl;
     exit(0);
@@ -73,14 +71,6 @@ bool Texture::load(const unsigned char* image, int width, int height, int format
   // Formato dei pixel dell'immagine di input
   // Tipo di dati dei pixel dell'immagine di input
   // Puntatore ai dati
-
-  // unsigned char* imageData = (unsigned char*)malloc(20000 * 20000 * 3 * sizeof(unsigned char));
-
-  // for (int i = 0; i < width * height * 3; i += 3) {
-  //     imageData[i] = rand()*255;      // Red
-  //     imageData[i + 1] = rand()*255;  // Green
-  //     imageData[i + 2] = rand()*255;  // Blue
-  // }
 
   glTexImage2D(_target, 0, GL_RGBA, width, height, 0, format, GL_UNSIGNED_BYTE, image);
 

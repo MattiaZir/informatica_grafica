@@ -34,19 +34,18 @@ dargli profondità.
 - **7**: Diminuisce l'esponente della luce speculare
 - **8**: Aumenta l'esponente della luce speculare
 
-**Esc**: Chiude la finestra corrente
-**Page Up**: Aumenta il numero di ottave del Perlin Noise
-**Page Down**: Diminuisce il numero di ottave del Perlin Noise
+- **Esc**: Chiude la finestra corrente
 - **R**: Genera Perlin Noise
-- **O**: Aumenta la larghezza e l'altezza del Perlin Noise
-- **L**: Diminuisce la larghezza e l'altezza del Perlin Noise
+- **O**: Aumenta la risoluzione del Perlin Noise
+- **L**: Diminuisce la risoluzione del Perlin Noise
 - **I**: Aumenta la dimensione della griglia del Perlin Noise
 - **K**: Diminuisce la dimensione della griglia del Perlin Noise
 - **Z**: Diminuisce il contrasto del Perlin Noise
 - **X**: Aumenta il contrasto del Perlin Noise
+- **Page Up**: Aumenta il numero di ottave del Perlin Noise
+- **Page Down**: Diminuisce il numero di ottave del Perlin Noise
 
 ## File chiave:
 
 **cube.cpp**: All'interno di questo viene generato il perlin noise, oltre che il cubo su cui è applicato.
 **14.frag**: Qui viene applicato il bump mapping.
-****

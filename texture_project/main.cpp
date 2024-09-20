@@ -9,7 +9,6 @@
 
 #include "cube.h"
 #include "myshaderclass.h"
-#include "perlinnoiseshader.h"
 
 #include "mesh.h"
 
