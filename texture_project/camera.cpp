@@ -40,7 +40,7 @@ void Camera::reset() {
 }
 
 void Camera::update() {
-	_combined = _projection * _camera;  
+	_combined = _projection * _camera;
 }
 
 const glm::mat4& Camera::CP() const {
@@ -85,7 +85,7 @@ glm::mat4 Camera::perspective_projection(float FOVDeg, float width, float height
   glm::mat4 p = glm::perspective(
     	glm::radians(FOVDeg),
     	width/height,
-    	znear, 
+    	znear,
     	zfar);
 
 	return p;
@@ -120,13 +120,13 @@ bool Camera::onSpecialKeyboard(int key) {
 		case GLUT_KEY_DOWN:
 			_position -= (_lookat_dir * _speed);
 		break;
-		
+
 		case GLUT_KEY_LEFT:
 			tmp = glm::cross(_up,_lookat_dir);
 			tmp = glm::normalize(tmp);
 			_position += (tmp * _speed);
 		break;
-		
+
 		case GLUT_KEY_RIGHT:
 			tmp = glm::cross(_lookat_dir,_up);
 			tmp = glm::normalize(tmp);
@@ -151,13 +151,13 @@ bool Camera::onMouse(int x, int y) {
     _mouse_lastY = y;
     _first_mouse_call = false;
   }
-  
+
   float xoffset = x - _mouse_lastX;
   float yoffset = _mouse_lastY - y;
 
   if (xoffset + yoffset == 0) return false;
 
-  if (!_lock_mouse_position) { 
+  if (!_lock_mouse_position) {
   	_mouse_lastX = x;
   	_mouse_lastY = y;
 	}
@@ -173,7 +173,7 @@ bool Camera::onMouse(int x, int y) {
   	_pitch_deg = 89.0f;
   if(_pitch_deg < -89.0f)
     _pitch_deg = -89.0f;
-	
+
   glm::vec3 direction;
   direction.x = cos(glm::radians(_yaw_deg)) * cos(glm::radians(_pitch_deg));
   direction.y = sin(glm::radians(_pitch_deg));
@@ -182,13 +182,13 @@ bool Camera::onMouse(int x, int y) {
 
   _camera = camera_setting(_position, _position + _lookat_dir, _up);
 	update();
-  
+
 	return true;
 }
 
 void Camera::set_mouse_init_position(int x, int y) {
 	_mouse_lastX = x;
-	_mouse_lastY = y;	
+	_mouse_lastY = y;
 }
 
 void Camera::lock_mouse_position(bool lock) {

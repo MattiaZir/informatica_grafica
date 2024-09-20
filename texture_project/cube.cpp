@@ -1,5 +1,7 @@
+#define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "cube.h"
 #include "glm/glm.hpp"
+#include "stb_image_write.h"
 
 #include <iostream>
   /**
@@ -142,7 +144,7 @@ void Cube::swap_textures(int texture_id) {
   _texture.setTextureID(texture_id);
 }
 
-void Cube::generate_perlin_noise(int width = 512, int height = 512, int octaves = 12, int grid_size = 100) {
+void Cube::generate_perlin_noise(int width, int height, int octaves, int grid_size, float contrast) {
   unsigned char* imageData = (unsigned char*) malloc(width * height * 4 * sizeof(unsigned char));
   unsigned char* bumpData  = (unsigned char*) malloc(width * height * 4 * sizeof(unsigned char));
 
@@ -165,7 +167,7 @@ void Cube::generate_perlin_noise(int width = 512, int height = 512, int octaves 
       }
 
       // contrasto
-      value *= 1.1f;
+      value *= contrast;
 
       //clipping
       if (value > 1.0f)
@@ -182,9 +184,10 @@ void Cube::generate_perlin_noise(int width = 512, int height = 512, int octaves 
       imageData[index + 2] = static_cast<unsigned char>(color.b * 255);
       imageData[index + 3] = 255;
 
-      bumpData[index] =  bw_value * 255;
-      bumpData[index + 1] = bw_value * 255;
-      bumpData[index + 2] = bw_value * 255;
+
+      bumpData[index] =  static_cast<unsigned char>(bw_value * 255);
+      bumpData[index + 1] = static_cast<unsigned char>(bw_value * 255);
+      bumpData[index + 2] = static_cast<unsigned char>(bw_value * 255);
       bumpData[index + 3] = 255;
 
     }
@@ -192,6 +195,9 @@ void Cube::generate_perlin_noise(int width = 512, int height = 512, int octaves 
 
   _texture.load(imageData, width, height, GL_RGBA);
   _bump_map.load(bumpData, width, height, GL_RGBA);
+
+  stbi_write_png("noise_texture.png", width, height, 4, imageData, width * 4);
+  stbi_write_png("bump_texture.png", width, height, 4, bumpData, width * 4);
   free(imageData);
   free(bumpData);
 }

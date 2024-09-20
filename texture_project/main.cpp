@@ -50,9 +50,11 @@ struct perlin_params {
   int height = 512;
   int octaves = 1;
   int grid_size = 100;
+  float contrast = 1.0;
 
   int GRID_MODIFIER = 10;
   int SIZE_MODIFIER = 256;
+  float CONTRAST_MODIFIER = 0.1;
 
 } perlin_params;
 
@@ -175,7 +177,8 @@ void MyRenderScene() {
         perlin_params.width,
         perlin_params.height,
         perlin_params.octaves,
-        perlin_params.grid_size);
+        perlin_params.grid_size,
+        perlin_params.contrast);
       MODEL_TO_RENDER = 'c'; break;
   }
 
@@ -187,11 +190,6 @@ void MyRenderScene() {
 void MyKeyboard(unsigned char key, int x, int y) {
   switch ( key )
   {
-    case 27: // Escape key
-      glutDestroyWindow(glutGetWindow());
-      return;
-    break;
-
     // case 'a':
     //   global.gradY -= global.SPEED;
     // break;
@@ -205,20 +203,33 @@ void MyKeyboard(unsigned char key, int x, int y) {
     //   global.gradX += global.SPEED;
     // break;
 
-    case 'a':
-      global.diffusive_light.direction(global.diffusive_light.direction() - glm::vec3(0,0.01,0));
-    break;
-
-    case 'd':
-      global.diffusive_light.direction(global.diffusive_light.direction() + glm::vec3(0,0.01,0));
-    break;
-
-    case 's':
-      global.diffusive_light.direction(global.diffusive_light.direction() - glm::vec3(0.01,0,0));
+    case 27: // Escape key
+      glutDestroyWindow(glutGetWindow());
+      return;
     break;
 
     case 'w':
-      global.diffusive_light.direction(global.diffusive_light.direction() + glm::vec3(0.01,0,0));
+      global.diffusive_light.direction(global.diffusive_light.direction() + glm::vec3(0,0.05,0));
+    break;
+
+    case 's':
+      global.diffusive_light.direction(global.diffusive_light.direction() - glm::vec3(0,0.05,0));
+    break;
+
+    case 'a':
+      global.diffusive_light.direction(global.diffusive_light.direction() - glm::vec3(0.05,0,0));
+    break;
+
+    case 'd':
+      global.diffusive_light.direction(global.diffusive_light.direction() + glm::vec3(0.05,0,0));
+    break;
+
+    case 'q':
+      global.diffusive_light.direction(global.diffusive_light.direction() - glm::vec3(0,0,0.05));
+    break;
+
+    case 'e':
+      global.diffusive_light.direction(global.diffusive_light.direction() + glm::vec3(0,0,0.05));
     break;
 
     // Variamo l'intensità di luce ambientale
@@ -280,6 +291,28 @@ void MyKeyboard(unsigned char key, int x, int y) {
 
     case 'k':
       perlin_params.grid_size = std::max(perlin_params.GRID_MODIFIER, perlin_params.grid_size - perlin_params.GRID_MODIFIER);
+      MODEL_TO_RENDER = 'r';
+    break;
+
+    case 'f':
+      global.gradY -= global.SPEED;
+    break;
+    case 'h':
+      global.gradY += global.SPEED;
+    break;
+    case 't':
+      global.gradX -= global.SPEED;
+    break;
+    case 'g':
+      global.gradX += global.SPEED;
+    break;
+
+    case 'z':
+      perlin_params.contrast = std::max(0.1f, perlin_params.contrast - perlin_params.CONTRAST_MODIFIER);
+      MODEL_TO_RENDER = 'r';
+    break;
+    case 'x':
+      perlin_params.contrast += perlin_params.CONTRAST_MODIFIER;
       MODEL_TO_RENDER = 'r';
     break;
 
