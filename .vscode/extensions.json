@@ -1,6 +1,0 @@
-{
-    "recommendations": [
-        "ms-vscode.cpptools",   // c++ liting and debugging
-        "slevesque.shader"      // shader linting
-    ]
-}
